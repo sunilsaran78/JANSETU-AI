@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JanSetu – Find government schemes you qualify for</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;800&family=Noto+Sans+Kannada:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#F5F6FA;--card:#fff;--ink:#16213A;--mute:#5B647A;--line:#DDE1EC;--navy:#1B2A4A;--saf:#E8891C;--grn:#1E7A4F;--amb:#A86A00;--on:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1524;--card:#18203A;--ink:#EEF1F8;--mute:#A0A9C0;--line:#2B3556;--navy:#2A3B66;--grn:#4CC38A;--amb:#F0B04A}}
+:root[data-theme="dark"]{--bg:#0F1524;--card:#18203A;--ink:#EEF1F8;--mute:#A0A9C0;--line:#2B3556;--navy:#2A3B66;--grn:#4CC38A;--amb:#F0B04A}
+*{box-sizing:border-box}html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:17px/1.55 "Mukta","Noto Sans Kannada",system-ui,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px 48px}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+.logo{font-weight:800;font-size:22px;color:var(--ink);cursor:pointer;display:flex;gap:8px;align-items:center}
+.logo svg{width:34px;height:22px}
+select,input{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%}
+#lang{width:auto;padding:6px 10px}
+:focus-visible{outline:3px solid var(--saf);outline-offset:2px}
+h1{font-size:clamp(32px,8vw,50px);line-height:1.1;margin:18px 0 12px;font-weight:800}
+h2{font-size:24px;margin:8px 0 4px}
+.hero{padding:10px 0 6px}.hero p{color:var(--mute);max-width:52ch;margin:0 0 20px}
+.btn{background:var(--saf);color:#1a1100;border:0;border-radius:10px;padding:14px 22px;font:inherit;font-weight:800;cursor:pointer;display:inline-block;text-decoration:none}
+.btn.alt{background:transparent;border:1px solid var(--line);color:var(--ink);font-weight:600}
+.bridge{margin:24px 0 8px;width:100%;height:auto}
+.stats{display:flex;gap:12px;flex-wrap:wrap;color:var(--mute);margin-top:18px}
+.stats b{color:var(--ink)}
+label{display:block;font-weight:600;margin:16px 0 6px}
+.chk{display:flex;gap:10px;align-items:center;font-weight:400}.chk input{width:20px;height:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}
+.card.click{cursor:pointer}.card.click:hover{border-color:var(--saf)}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.pill{font-weight:800;font-size:15px;white-space:nowrap}
+.g{color:var(--grn)}.y{color:var(--amb)}
+.bar{height:6px;border-radius:3px;background:var(--line);margin:10px 0 8px;overflow:hidden}.bar i{display:block;height:100%;background:var(--grn)}
+.bar.y i{background:var(--amb)}
+.mute{color:var(--mute);font-size:15px}
+ul{padding-left:20px;margin:6px 0}li{margin:3px 0}
+.ok{list-style:none;padding:0}.ok li:before{content:"✓ ";color:var(--grn);font-weight:800}.ok li.no:before{content:"✗ ";color:var(--amb)}
+.note{border-left:4px solid var(--saf);padding:8px 12px;font-size:14px;color:var(--mute);margin-top:22px}
+.sec{border-top:1px solid var(--line);margin-top:16px;padding-top:10px}.sec h3{margin:4px 0;font-size:18px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chips span{border:1px solid var(--line);border-radius:20px;padding:2px 12px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="logo" id="home"><svg viewBox="0 0 34 22" fill="none" stroke="#E8891C" stroke-width="3" stroke-linecap="round"><path d="M2 20h30M4 20C4 8 13 4 17 4s13 4 13 16M17 4v16"/></svg>JanSetu</div>
+<select id="lang" aria-label="Language"><option value="en">English</option><option value="kn">ಕನ್ನಡ</option><option value="hi">हिन्दी</option></select></header>
+<main id="app"></main>
+</div>
+<script>
+const T={
+en:{sel:"Select",err:"Please answer every question to see your matches.",tag:"The bridge between you and your government benefits.",h:"Find the government schemes you qualify for.",p:"Answer a few questions. JanSetu matches you with central and state schemes, explains them simply and takes you to the official application page.",cta:"Find schemes for me",age:"Your age",state:"State",occ:"What do you do?",inc:"Annual family income",gen:"Gender",cat:"Category",dis:"I have a disability (40% or more)",find:"Show my matches",back:"Back",edit:"Edit my details",m1:"scheme may be relevant to you",mN:"schemes may be relevant to you",none:"No strong matches yet. Try changing your details.",ben:"Benefit",who:"Who can apply",docs:"Documents to keep ready",apply:"Apply on official portal",src:"Source",ver:"Last checked",match:"match",why:"Why you matched",excellent:"Excellent match",likely:"Likely match",possible:"Possible match",disc:"JanSetu is a matching aid, not an official eligibility decision. Rules and amounts change, so always confirm on the official portal before applying.",stats:"Prototype with 14 sample schemes",o:{student:"Student",farmer:"Farmer",self:"Self-employed / business",emp:"Employed",job:"Looking for work",home:"Homemaker",senior:"Retired"},i:{1:"Up to ₹1 lakh",2.5:"₹1 – 2.5 lakh",5:"₹2.5 – 5 lakh",8:"₹5 – 8 lakh",99:"Above ₹8 lakh"},g:{F:"Female",M:"Male",O:"Other"},c:{gen:"General",obc:"OBC",sc:"SC",st:"ST"},st:{KA:"Karnataka",MH:"Maharashtra",TN:"Tamil Nadu",TG:"Telangana",XX:"Other state / UT"},r:{age:"Age requirement met",inc:"Income within limit",occ:"Occupation fits",state:"Available in your state",gen:"Open to your gender",cat:"Category fits",dis:"Disability criteria met",nage:"Age outside range",ninc:"Income may be above limit",nocc:"Occupation may not fit"}},
+kn:{sel:"ಆಯ್ಕೆಮಾಡಿ",err:"ಹೊಂದಾಣಿಕೆ ನೋಡಲು ಎಲ್ಲಾ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ.",tag:"ನಿಮ್ಮ ಮತ್ತು ಸರ್ಕಾರಿ ಸೌಲಭ್ಯಗಳ ನಡುವಿನ ಸೇತುವೆ.",h:"ನೀವು ಅರ್ಹರಾಗಿರುವ ಸರ್ಕಾರಿ ಯೋಜನೆಗಳನ್ನು ಹುಡುಕಿ.",p:"ಕೆಲವು ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ. ಜನಸೇತು ನಿಮಗೆ ಹೊಂದುವ ಕೇಂದ್ರ ಮತ್ತು ರಾಜ್ಯ ಯೋಜನೆಗಳನ್ನು ಸರಳವಾಗಿ ವಿವರಿಸಿ ಅಧಿಕೃತ ಅರ್ಜಿ ಪುಟಕ್ಕೆ ಕರೆದೊಯ್ಯುತ್ತದೆ.",cta:"ನನಗೆ ಯೋಜನೆಗಳನ್ನು ಹುಡುಕಿ",age:"ನಿಮ್ಮ ವಯಸ್ಸು",state:"ರಾಜ್ಯ",occ:"ನೀವು ಏನು ಮಾಡುತ್ತೀರಿ?",inc:"ವಾರ್ಷಿಕ ಕುಟುಂಬ ಆದಾಯ",gen:"ಲಿಂಗ",cat:"ವರ್ಗ",dis:"ನನಗೆ ಅಂಗವೈಕಲ್ಯ ಇದೆ (40% ಅಥವಾ ಹೆಚ್ಚು)",find:"ನನ್ನ ಹೊಂದಾಣಿಕೆಗಳನ್ನು ತೋರಿಸಿ",back:"ಹಿಂದೆ",edit:"ನನ್ನ ವಿವರ ಬದಲಿಸಿ",m1:"ಯೋಜನೆ ನಿಮಗೆ ಸಂಬಂಧಿಸಿರಬಹುದು",mN:"ಯೋಜನೆಗಳು ನಿಮಗೆ ಸಂಬಂಧಿಸಿರಬಹುದು",none:"ಇನ್ನೂ ಬಲವಾದ ಹೊಂದಾಣಿಕೆ ಇಲ್ಲ. ವಿವರಗಳನ್ನು ಬದಲಿಸಿ ನೋಡಿ.",ben:"ಲಾಭ",who:"ಯಾರು ಅರ್ಜಿ ಸಲ್ಲಿಸಬಹುದು",docs:"ಸಿದ್ಧವಾಗಿಡಬೇಕಾದ ದಾಖಲೆಗಳು",apply:"ಅಧಿಕೃತ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ",src:"ಮೂಲ",ver:"ಕೊನೆಯ ಪರಿಶೀಲನೆ",match:"ಹೊಂದಾಣಿಕೆ",why:"ನೀವು ಏಕೆ ಹೊಂದುತ್ತೀರಿ",excellent:"ಅತ್ಯುತ್ತಮ ಹೊಂದಾಣಿಕೆ",likely:"ಸಾಧ್ಯತೆ ಹೆಚ್ಚು",possible:"ಸಾಧ್ಯವಿರಬಹುದು",disc:"ಜನಸೇತು ಒಂದು ಹೊಂದಾಣಿಕೆ ಸಹಾಯಕ, ಅಧಿಕೃತ ಅರ್ಹತಾ ನಿರ್ಧಾರವಲ್ಲ. ಅರ್ಜಿ ಸಲ್ಲಿಸುವ ಮೊದಲು ಅಧಿಕೃತ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",stats:"14 ಮಾದರಿ ಯೋಜನೆಗಳ ಮೂಲಮಾದರಿ",o:{student:"ವಿದ್ಯಾರ್ಥಿ",farmer:"ರೈತ",self:"ಸ್ವಯಂ ಉದ್ಯೋಗ / ವ್ಯಾಪಾರ",emp:"ಉದ್ಯೋಗಿ",job:"ಕೆಲಸ ಹುಡುಕುತ್ತಿದ್ದೇನೆ",home:"ಗೃಹಿಣಿ",senior:"ನಿವೃತ್ತ"},i:{1:"₹1 ಲಕ್ಷದವರೆಗೆ",2.5:"₹1 – 2.5 ಲಕ್ಷ",5:"₹2.5 – 5 ಲಕ್ಷ",8:"₹5 – 8 ಲಕ್ಷ",99:"₹8 ಲಕ್ಷಕ್ಕಿಂತ ಹೆಚ್ಚು"},g:{F:"ಮಹಿಳೆ",M:"ಪುರುಷ",O:"ಇತರೆ"},c:{gen:"ಸಾಮಾನ್ಯ",obc:"ಒಬಿಸಿ",sc:"ಎಸ್‌ಸಿ",st:"ಎಸ್‌ಟಿ"},st:{KA:"ಕರ್ನಾಟಕ",MH:"ಮಹಾರಾಷ್ಟ್ರ",TN:"ತಮಿಳುನಾಡು",TG:"ತೆಲಂಗಾಣ",XX:"ಇತರೆ ರಾಜ್ಯ / ಕೇಂ.ಪ್ರ."},r:{age:"ವಯಸ್ಸಿನ ಮಿತಿ ಪೂರೈಸಿದೆ",inc:"ಆದಾಯ ಮಿತಿಯೊಳಗಿದೆ",occ:"ಉದ್ಯೋಗ ಹೊಂದುತ್ತದೆ",state:"ನಿಮ್ಮ ರಾಜ್ಯದಲ್ಲಿ ಲಭ್ಯ",gen:"ನಿಮ್ಮ ಲಿಂಗಕ್ಕೆ ಮುಕ್ತ",cat:"ವರ್ಗ ಹೊಂದುತ್ತದೆ",dis:"ಅಂಗವೈಕಲ್ಯ ಮಾನದಂಡ ಪೂರೈಸಿದೆ",nage:"ವಯಸ್ಸು ಮಿತಿಯ ಹೊರಗೆ",ninc:"ಆದಾಯ ಮಿತಿಗಿಂತ ಹೆಚ್ಚಿರಬಹುದು",nocc:"ಉದ್ಯೋಗ ಹೊಂದದಿರಬಹುದು"}},
+hi:{sel:"चुनें",err:"मिलान देखने के लिए सभी सवालों के जवाब दें।",tag:"आपके और सरकारी लाभों के बीच का सेतु।",h:"जिन सरकारी योजनाओं के आप पात्र हैं, उन्हें खोजें।",p:"कुछ सवालों के जवाब दें। जनसेतु आपके लिए केंद्र और राज्य की योजनाएँ ढूँढता है, उन्हें आसान भाषा में समझाता है और आधिकारिक आवेदन पेज तक ले जाता है।",cta:"मेरे लिए योजनाएँ खोजें",age:"आपकी उम्र",state:"राज्य",occ:"आप क्या करते हैं?",inc:"वार्षिक पारिवारिक आय",gen:"लिंग",cat:"श्रेणी",dis:"मुझे विकलांगता है (40% या अधिक)",find:"मेरे मिलान दिखाएँ",back:"वापस",edit:"मेरी जानकारी बदलें",m1:"योजना आपके लिए प्रासंगिक हो सकती है",mN:"योजनाएँ आपके लिए प्रासंगिक हो सकती हैं",none:"अभी कोई मज़बूत मिलान नहीं। अपनी जानकारी बदलकर देखें।",ben:"लाभ",who:"कौन आवेदन कर सकता है",docs:"तैयार रखने वाले दस्तावेज़",apply:"आधिकारिक पोर्टल पर आवेदन करें",src:"स्रोत",ver:"आख़िरी जाँच",match:"मिलान",why:"आप क्यों मेल खाते हैं",excellent:"बेहतरीन मिलान",likely:"संभावित मिलान",possible:"हो सकता है",disc:"जनसेतु एक मिलान सहायक है, आधिकारिक पात्रता निर्णय नहीं। आवेदन से पहले आधिकारिक पोर्टल पर पुष्टि करें।",stats:"14 नमूना योजनाओं वाला प्रोटोटाइप",o:{student:"छात्र",farmer:"किसान",self:"स्वरोज़गार / व्यापार",emp:"नौकरीपेशा",job:"काम की तलाश में",home:"गृहिणी",senior:"सेवानिवृत्त"},i:{1:"₹1 लाख तक",2.5:"₹1 – 2.5 लाख",5:"₹2.5 – 5 लाख",8:"₹5 – 8 लाख",99:"₹8 लाख से अधिक"},g:{F:"महिला",M:"पुरुष",O:"अन्य"},c:{gen:"सामान्य",obc:"ओबीसी",sc:"एससी",st:"एसटी"},st:{KA:"कर्नाटक",MH:"महाराष्ट्र",TN:"तमिलनाडु",TG:"तेलंगाना",XX:"अन्य राज्य / केंद्र शासित"},r:{age:"आयु सीमा पूरी",inc:"आय सीमा के भीतर",occ:"व्यवसाय मेल खाता है",state:"आपके राज्य में उपलब्ध",gen:"आपके लिंग के लिए खुली",cat:"श्रेणी मेल खाती है",dis:"विकलांगता मानदंड पूरा",nage:"आयु सीमा से बाहर",ninc:"आय सीमा से अधिक हो सकती है",nocc:"व्यवसाय मेल नहीं खा सकता"}}};
+// n: names [en,kn,hi]; a: age range; i: max income (lakh); o: occupations; s: states; g: gender; c: categories; d: needs disability
+const S=[
+{n:["Post-Matric Scholarship for SC Students","ಪರಿಶಿಷ್ಟ ಜಾತಿ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಪೋಸ್ಟ್-ಮೆಟ್ರಿಕ್ ವಿದ್ಯಾರ್ಥಿವೇತನ","एससी छात्रों के लिए पोस्ट-मैट्रिक छात्रवृत्ति"],b:"Maintenance allowance plus course fee support for post-matric courses.",a:[15,40],i:2.5,o:["student"],c:["sc"],docs:["Aadhaar","Caste certificate","Income certificate","Bank passbook","Previous marksheet"],u:"https://scholarships.gov.in",src:"Govt. of India – National Scholarship Portal"},
+{n:["Central Sector Scholarship for College Students","ಕಾಲೇಜು ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಕೇಂದ್ರ ವಲಯ ವಿದ್ಯಾರ್ಥಿವೇತನ","कॉलेज छात्रों के लिए केंद्रीय क्षेत्र छात्रवृत्ति"],b:"Merit-based yearly scholarship (around ₹12,000 for undergraduates) for students with high Class 12 marks.",a:[17,27],i:4.5,o:["student"],docs:["Aadhaar","Class 12 marksheet","Income certificate","Bank passbook","College ID"],u:"https://scholarships.gov.in",src:"Govt. of India – National Scholarship Portal"},
+{n:["Karnataka State Scholarship Portal (SSP)","ಕರ್ನಾಟಕ ರಾಜ್ಯ ವಿದ್ಯಾರ್ಥಿವೇತನ ಪೋರ್ಟಲ್ (SSP)","कर्नाटक राज्य छात्रवृत्ति पोर्टल (SSP)"],b:"Single portal for state scholarships and fee support. Amount depends on course and category.",a:[15,35],i:8,o:["student"],s:["KA"],docs:["Aadhaar","Income certificate","Caste certificate (if applicable)","Bank passbook","College admission proof"],u:"https://ssp.karnataka.gov.in",src:"Govt. of Karnataka"},
+{n:["PM-KISAN Samman Nidhi","ಪಿಎಂ-ಕಿಸಾನ್ ಸಮ್ಮಾನ್ ನಿಧಿ","पीएम-किसान सम्मान निधि"],b:"₹6,000 a year paid in three instalments directly to the bank account of eligible farmer families.",a:[18,99],i:99,o:["farmer"],docs:["Aadhaar","Land records","Bank passbook linked to Aadhaar","Mobile number"],u:"https://pmkisan.gov.in",src:"Govt. of India – Dept. of Agriculture"},
+{n:["Ayushman Bharat PM-JAY","ಆಯುಷ್ಮಾನ್ ಭಾರತ್ ಪಿಎಂ-ಜೆಎವೈ","आयुष्मान भारत पीएम-जेएवाई"],b:"Health cover of up to ₹5 lakh per family per year for hospital treatment. Eligibility depends on official family lists.",a:[0,99],i:3,docs:["Aadhaar","Ration card","Mobile number"],u:"https://pmjay.gov.in",src:"National Health Authority"},
+{n:["PM Awas Yojana (Housing)","ಪಿಎಂ ಆವಾಸ್ ಯೋಜನೆ (ವಸತಿ)","पीएम आवास योजना (आवास)"],b:"Financial help or interest subsidy to build, buy or improve a home for eligible families.",a:[18,99],i:6,docs:["Aadhaar","Income proof","Bank passbook","Land / property papers","Declaration of no pucca house"],u:"https://pmaymis.gov.in",src:"Ministry of Housing & Urban Affairs"},
+{n:["Skill India – PMKVY Short-Term Training","ಸ್ಕಿಲ್ ಇಂಡಿಯಾ – ಪಿಎಂಕೆವಿವೈ ತರಬೇತಿ","स्किल इंडिया – पीएमकेवीवाई प्रशिक्षण"],b:"Free short-term skill training with a certificate, in many trades.",a:[15,45],i:99,o:["student","job","home","emp"],docs:["Aadhaar","Bank passbook","Education certificate","Passport photo"],u:"https://www.skillindia.gov.in",src:"Skill India – MSDE"},
+{n:["PM MUDRA Loan","ಪಿಎಂ ಮುದ್ರಾ ಸಾಲ","पीएम मुद्रा ऋण"],b:"Collateral-free loans up to ₹20 lakh for small businesses and new ventures.",a:[18,65],i:99,o:["self","job"],docs:["Aadhaar","PAN","Business plan or proof","Address proof","Bank statements"],u:"https://www.mudra.org.in",src:"MUDRA / Ministry of Finance"},
+{n:["Atal Pension Yojana","ಅಟಲ್ ಪಿಂಚಣಿ ಯೋಜನೆ","अटल पेंशन योजना"],b:"Guaranteed monthly pension of ₹1,000–₹5,000 after age 60 for a small monthly contribution.",a:[18,40],i:99,o:["farmer","self","emp","home","job"],docs:["Aadhaar","Savings bank account","Mobile number"],u:"https://www.jansuraksha.gov.in",src:"Ministry of Finance – Jan Suraksha"},
+{n:["Indira Gandhi National Old Age Pension (NSAP)","ಇಂದಿರಾ ಗಾಂಧಿ ರಾಷ್ಟ್ರೀಯ ವೃದ್ಧಾಪ್ಯ ವೇತನ (NSAP)","इंदिरा गांधी राष्ट्रीय वृद्धावस्था पेंशन (NSAP)"],b:"Monthly pension for senior citizens from low-income (BPL) households. State governments often add to the amount.",a:[60,99],i:1.5,docs:["Aadhaar","Age proof","BPL card / income proof","Bank passbook"],u:"https://nsap.nic.in",src:"Ministry of Rural Development"},
+{n:["Gruha Lakshmi (Karnataka)","ಗೃಹ ಲಕ್ಷ್ಮಿ (ಕರ್ನಾಟಕ)","गृह लक्ष्मी (कर्नाटक)"],b:"₹2,000 a month to the woman head of an eligible family.",a:[18,99],i:99,s:["KA"],g:"F",docs:["Aadhaar","Ration card (BPL/APL/Antyodaya)","Bank passbook","Mobile number"],u:"https://sevasindhu.karnataka.gov.in",src:"Govt. of Karnataka – Seva Sindhu"},
+{n:["Yuva Nidhi (Karnataka)","ಯುವ ನಿಧಿ (ಕರ್ನಾಟಕ)","युवा निधि (कर्नाटक)"],b:"Monthly unemployment allowance for recent graduates and diploma holders, for up to 24 months.",a:[18,30],i:99,o:["job"],s:["KA"],docs:["Aadhaar","Degree / diploma certificate","Karnataka residence proof","Bank passbook"],u:"https://sevasindhu.karnataka.gov.in",src:"Govt. of Karnataka – Seva Sindhu"},
+{n:["Stand-Up India Loan","ಸ್ಟ್ಯಾಂಡ್-ಅಪ್ ಇಂಡಿಯಾ ಸಾಲ","स्टैंड-अप इंडिया ऋण"],b:"Bank loans of ₹10 lakh to ₹1 crore for women and SC/ST first-time entrepreneurs.",a:[18,65],i:99,o:["self","job"],gc:true,docs:["Aadhaar","PAN","Caste certificate (if applicable)","Project report","Address proof"],u:"https://www.standupmitra.in",src:"SIDBI / Ministry of Finance"},
+{n:["UDID Disability Card","ಯುಡಿಐಡಿ ಅಂಗವೈಕಲ್ಯ ಕಾರ್ಡ್","यूडीआईडी विकलांगता कार्ड"],b:"A single national ID that unlocks disability benefits, pensions and concessions.",a:[0,99],i:99,d:true,docs:["Aadhaar","Medical certificate","Passport photo","Signature"],u:"https://www.swavlambancard.gov.in",src:"Dept. of Empowerment of Persons with Disabilities"}];
+const V="Oct 2026 (sample data)";
+let L="en",P={age:"",state:"",occ:"",inc:"",gen:"",cat:"",dis:false},ERR=false,$=s=>document.querySelector(s);
+const t=k=>T[L][k];
+function match(s,p){const r=[],R=T[L].r;
+if(s.s&&!s.s.includes(p.state))return null;
+if(s.g&&s.g!==p.gen)return null;
+if(s.d&&!p.dis)return null;
+if(s.gc&&!(p.gen==="F"||p.cat==="sc"||p.cat==="st"))return null;
+if(s.c&&!s.c.includes(p.cat))return null;
+if(s.o&&!s.o.includes(p.occ))return null;
+if(p.age<s.a[0]||p.age>s.a[1])return null;
+const lo={1:0,2.5:1,5:2.5,8:5,99:8}[p.inc];
+if(lo>=s.i)return null;
+let w=0,m=0;const add=(wt,k,y,n)=>{w+=wt;m+=wt*k;r.push([k===1,k===1?y:n])};
+add(30,1,R.age,R.nage);
+add(40,p.inc<=s.i?1:.5,R.inc,R.ninc);
+if(s.o)add(30,1,R.occ,R.nocc);
+if(s.s)r.push([true,R.state]);if(s.g)r.push([true,R.gen]);if(s.c||s.gc)r.push([true,R.cat]);if(s.d)r.push([true,R.dis]);
+return{s,sc:Math.round(m/w*100),r}}
+function lbl(sc){return sc>=90?t("excellent"):sc>=70?t("likely"):t("possible")}
+function opts(o,sel){return `<option value="" disabled${sel===""?" selected":""}>${t("sel")}</option>`+Object.entries(o).map(([k,v])=>`<option value="${k}"${String(sel)===k?" selected":""}>${v}</option>`).join("")}
+function home(){$("#app").innerHTML=`<section class="hero"><svg class="bridge" viewBox="0 0 700 90" fill="none" stroke="var(--saf)" stroke-width="4" stroke-linecap="round" aria-hidden="true"><path d="M0 80h700"/><path d="M30 80C30 20 130 12 175 12s145 8 145 68M320 80c0-60 100-68 145-68s145 8 145 68M175 12v68M465 12v68"/><path d="M60 80V60M100 80V30M250 80V30M290 80V60M350 80V60M390 80V30M540 80V30M580 80V60" stroke-width="2" stroke="var(--navy)"/></svg>
+<h1>${t("h")}</h1><p>${t("p")}</p><button class="btn" id="go">${t("cta")}</button><div class="stats"><span>${t("tag")}</span><span><b>${t("stats")}</b></span></div></section><div class="note">${t("disc")}</div>`;
+$("#go").onclick=form}
+function form(){const s=t("st"),p=P;
+$("#app").innerHTML=`<h2>${t("cta")}</h2>
+<label for="age">${t("age")}</label><input id="age" type="number" inputmode="numeric" min="0" max="110" placeholder="${t("age")}" value="${p.age}">
+<label for="state">${t("state")}</label><select id="state">${opts(s,p.state)}</select>
+<label for="occ">${t("occ")}</label><select id="occ">${opts(t("o"),p.occ)}</select>
+<label for="inc">${t("inc")}</label><select id="inc">${opts(t("i"),p.inc)}</select>
+<label for="gen">${t("gen")}</label><select id="gen">${opts(t("g"),p.gen)}</select>
+<label for="cat">${t("cat")}</label><select id="cat">${opts(t("c"),p.cat)}</select>
+<label class="chk"><input id="dis" type="checkbox"${p.dis?" checked":""}>${t("dis")}</label>
+${ERR?`<p class="y" role="alert"><b>${t("err")}</b></p>`:""}<p><button class="btn" id="go">${t("find")}</button></p>`;ERR=false;
+$("#go").onclick=()=>{P={age:+$("#age").value||0,state:$("#state").value,occ:$("#occ").value,inc:$("#inc").value?+$("#inc").value:"",gen:$("#gen").value,cat:$("#cat").value,dis:$("#dis").checked};if(!P.age||!P.state||!P.occ||!P.inc||!P.gen||!P.cat){ERR=true;form();return}results()}}
+function results(){const res=S.map(s=>match(s,P)).filter(x=>x&&x.sc>=50).sort((a,b)=>b.sc-a.sc);
+$("#app").innerHTML=`<h2>🎯 ${res.length} ${res.length===1?t("m1"):t("mN")}</h2><p><button class="btn alt" id="ed">${t("edit")}</button></p>`+(res.length?res.map((x,i)=>`<div class="card click" tabindex="0" role="button" data-i="${i}"><div class="row"><b>${x.s.n[["en","kn","hi"].indexOf(L)]}</b><span class="pill ${x.sc>=70?"g":"y"}">${x.sc}%</span></div><div class="bar ${x.sc>=70?"":"y"}"><i style="width:${x.sc}%"></i></div><div class="mute">${lbl(x.sc)} · ${x.s.b}</div></div>`).join(""):`<p class="mute">${t("none")}</p>`)+`<div class="note">${t("disc")}</div>`;
+$("#ed").onclick=form;
+document.querySelectorAll(".card.click").forEach(c=>{const f=()=>detail(res[+c.dataset.i]);c.onclick=f;c.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();f()}}})}
+function detail(x){const s=x.s;
+$("#app").innerHTML=`<p><button class="btn alt" id="bk">← ${t("back")}</button></p><h2>${s.n[["en","kn","hi"].indexOf(L)]}</h2>
+<div class="row"><span class="pill ${x.sc>=70?"g":"y"}">${x.sc}% ${t("match")} · ${lbl(x.sc)}</span></div><div class="bar ${x.sc>=70?"":"y"}"><i style="width:${x.sc}%"></i></div>
+<div class="sec"><h3>💰 ${t("ben")}</h3><p>${s.b}</p></div>
+<div class="sec"><h3>✅ ${t("why")}</h3><ul class="ok">${x.r.map(([ok,tx])=>`<li class="${ok?"":"no"}">${tx}</li>`).join("")}</ul></div>
+<div class="sec"><h3>📋 ${t("docs")}</h3><div class="chips">${s.docs.map(d=>`<span>${d}</span>`).join("")}</div></div>
+<div class="sec mute">🏛 ${t("src")}: ${s.src}<br>📅 ${t("ver")}: ${V}</div>
+<p><a class="btn" href="${s.u}" target="_blank" rel="noopener noreferrer">${t("apply")} ↗</a></p><div class="note">${t("disc")}</div>`;
+$("#bk").onclick=results;window.scrollTo(0,0)}
+$("#lang").onchange=e=>{L=e.target.value;document.documentElement.lang=L;home()};
+$("#home").onclick=home;
+home();
+</script>
+</body>
+</html>
